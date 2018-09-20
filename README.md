@@ -1,62 +1,173 @@
-# minishift - Work in progress
+# Running Minishift on Mac
 
-Install Minishift on mac 
-
-* brew cask install minishift
-https://docs.okd.io/latest/minishift/getting-started/installing.html
-
-* start it 
-minishift start
+Reference documentation is available at: 
 https://docs.okd.io/latest/minishift/getting-started/quickstart.html
 
 
-NEEDS a Hypervisor:
-https://docs.okd.io/latest/minishift/getting-started/setting-up-virtualization-environment.html#setting-up-xhyve-driver
+# Shortcut to installing everything manually 
+Run the script here with install-all
 
+`
+sh run-minishift.sh install-all
+`
+
+# install homebrew
+
+`
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)
+`
+
+# Install Xhyve - Hypervisor needed for minishift 
+Other options available are: 
+* Virtual Box
+
+`
+brew install xhyve
+`
+
+# Install Xhyve driver 
+
+`
 brew install docker-machine-driver-xhyve
+`
 
+Setup Driver: 
 sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
-Password: YOur machine password 
-
 sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
 
-INFO:
-ICC11575:kubernetes-aws msah$ brew info --installed docker-machine-driver-xhyve
-docker-machine-driver-xhyve: stable 0.3.3 (bottled), HEAD
-Docker Machine driver for xhyve
-https://github.com/zchee/docker-machine-driver-xhyve
-/usr/local/Cellar/docker-machine-driver-xhyve/0.3.3 (3 files, 10.2MB) *
-  Poured from bottle on 2018-09-14 at 14:14:12
-From: https://github.com/Homebrew/homebrew-core/blob/master/Formula/docker-machine-driver-xhyve.rb
-==> Dependencies
-Build: go ✘, ocaml ✘, opam ✘
-Required: libev ✔
-Recommended: docker-machine ✔
-==> Requirements
-Required: macOS >= 10.10 ✔
-==> Options
---without-docker-machine
-	Build without docker-machine support
---without-qcow2
-	Do not support qcow2 disk image format
---HEAD
-	Install HEAD version
-==> Caveats
-This driver requires superuser privileges to access the hypervisor. To
-enable, execute
-    sudo chown root:wheel /usr/local/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
-    sudo chmod u+s /usr/local/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
-==> Analytics
-install: 3515 (30d), 14821 (90d), 55970 (365d)
-install_on_request: 3391 (30d), 13349 (90d), 51513 (365d)
-build_error: 8 (30d)
-ICC11575:kubernetes-aws msah$ 
+This will ask for password of your machine.
+
+# Start minishift
+
+This will take a little bit of time. it took about 15 min for me.
+
+`
+minishfit start
+`
+
+with verbose: "--show-libmachine-logs -v 5"
+
+If everything was successful, the final output would be something like below.
+
+`
+The server is accessible via web console at:
+    https://192.168.64.2:8443
+
+You are logged in as:
+    User:     developer
+    Password: <any value>
+
+To login as administrator:
+    oc login -u system:admin
+
+
+-- Exporting of OpenShift images is occuring in background process with pid 2288.
+`
+
+
+# MANUAL STEPS
+
+## Use minishift oc-env to display the command you need to type into your shell in order to add the oc binary to your PATH environment variable. The output of oc-env will differ depending on OS and shell type.
+
+`
+ICC11575:~ msah$ minishift oc-env
+export PATH="/Users/msah/.minishift/cache/oc/v3.10.0/darwin:$PATH"
+# Run this command to configure your shell:
+# eval $(minishift oc-env)
+ICC11575:~ msah$ 
+
+ICC11575:~ msah$ export PATH="/Users/msah/.minishift/cache/oc/v3.10.0/darwin:$PATH"
+ICC11575:~ msah$ eval $(minishift oc-env)
+
+`
+
+
+# Login to Openshift
+
+`
+oc login -u system:admin
+Logged into "https://192.168.64.2:8443" as "system:admin" using existing credentials.
+
+You have access to the following projects and can switch between them with 'oc project <projectname>':
+
+    default
+    kube-dns
+    kube-proxy
+    kube-public
+    kube-system
+  * myproject
+    openshift
+    openshift-apiserver
+    openshift-controller-manager
+    openshift-core-operators
+    openshift-infra
+    openshift-node
+    openshift-web-console
+`
+
+# Viewing Web console
+`
+minishift console
+`
+
+or Use the URL it gave in logs: https://192.168.64.2:8443
+You can log in with any user. For this example, we will use admin as the user name and give this user admin privileges.
+
+# View specific project 
+
+`
+oc project <project-name>
+`
+
+# Viewing pods 
+
+`
+oc get pods
+`
+
+
+# Create a new project
+
+`
+oc create project <project-name>
+`
+
+# Adding a new Sample app 
+
+Shortcut: Run the create-sample.sh
+
+`
+oc new-app https://github.com/openshift/nodejs-ex -l name=nodejs-ex-app
+`
+
+# Exposing service
+
+`
+oc expose svc/nodejs-ex
+`
+
+
+# ADD DOCKER DAEMON
+
+https://docs.okd.io/latest/minishift/using/docker-daemon.html
+
+`
+
+ICC11575:~ msah$ minishift docker-env
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.64.2:2376"
+export DOCKER_CERT_PATH="/Users/msah/.minishift/certs"
+# Run this command to configure your shell:
+# eval $(minishift docker-env)
+ICC11575:~ msah$ export DOCKER_TLS_VERIFY="1"
+ICC11575:~ msah$ export DOCKER_HOST="tcp://192.168.64.2:2376"
+ICC11575:~ msah$ export DOCKER_CERT_PATH="/Users/msah/.minishift/certs"
+`
+
+Now we should be able to give command `docker ps` to view the docker containers running for minishift.
 
 
 
-NOW START MINISHIFT:
-
-minishift start
 
 
 
