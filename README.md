@@ -4,6 +4,12 @@ Reference documentation is available at:
 https://docs.okd.io/latest/minishift/getting-started/quickstart.html
 
 
+DELETE AT THE END:
+
+`
+minishift delete --clear-cache
+`
+
 # Shortcut to installing everything manually 
 Run the script here with install-all
 
@@ -113,39 +119,6 @@ minishift console
 or Use the URL it gave in logs: https://192.168.64.2:8443
 You can log in with any user. For this example, we will use admin as the user name and give this user admin privileges.
 
-# View specific project 
-
-`
-oc project <project-name>
-`
-
-# Viewing pods 
-
-`
-oc get pods
-`
-
-
-# Create a new project
-
-`
-oc create project <project-name>
-`
-
-# Adding a new Sample app 
-
-Shortcut: Run the create-sample.sh
-
-`
-oc new-app https://github.com/openshift/nodejs-ex -l name=nodejs-ex-app
-`
-
-# Exposing service
-
-`
-oc expose svc/nodejs-ex
-`
-
 
 # ADD DOCKER DAEMON
 
@@ -166,7 +139,35 @@ ICC11575:~ msah$ export DOCKER_CERT_PATH="/Users/msah/.minishift/certs"
 
 Now we should be able to give command `docker ps` to view the docker containers running for minishift.
 
+# Viewing Things
 
+ADDD SOMETHING HERE
+
+# Adding a new project and app 
+
+Shortcut: Run the create-sample.sh
+
+
+
+
+# View specific project 
+
+`
+oc project <project-name>
+`
+
+# Viewing pods 
+
+`
+oc get pods
+`
+
+
+# Create a new project
+
+`
+oc new-project <project-name>
+`
 
 
 
