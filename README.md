@@ -10,12 +10,22 @@ DELETE AT THE END:
 minishift delete --clear-cache
 `
 
-# Shortcut to installing everything manually 
-Run the script here with install-all
+# Shortcuts
+
+* Installing eveything manually. Run the below script from home of repo
 
 `
 sh run-minishift.sh install-all
 `
+
+* Creating Sample apps
+
+_GOTCHAS_: There are paths in create-sample.sh, which will need to be updated.
+
+`
+sh create-sample.sh
+`
+
 
 # install homebrew
 
