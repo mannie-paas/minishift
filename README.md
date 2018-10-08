@@ -20,7 +20,7 @@ sh run-minishift.sh install-all
 
 * Creating Sample apps
 
-_GOTCHAS_: There are paths in create-sample.sh, which will need to be updated.
+*_GOTCHAS_*: There are paths in create-sample.sh, which will need to be updated.
 
 `
 sh create-sample.sh
