@@ -18,9 +18,14 @@ minishift delete --clear-cache
 sh run-minishift.sh install-all
 `
 
-* Creating Sample apps
+* Creating Sample apps: Run the scripts below
 
 *_GOTCHAS_*: There are paths in create-sample.sh, which will need to be updated.
+
+`
+sh environment.sh
+`
+
 
 `
 sh create-sample.sh

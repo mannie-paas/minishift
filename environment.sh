@@ -3,15 +3,21 @@
 eval $(minishift oc-env)
 
 
+sleep 60
 #minishift docker-env export DOCKER_TLS_VERIFY="1" export DOCKER_HOST="tcp://192.168.64.2:2376" export DOCKER_CERT_PATH="/Users/msah/.minishift/certs"
 eval $(minishift docker-env)
 
-oc login -u test-admin
+sleep 60
+#oc login -u test-admin
 oc login -u system:admin
 
-oc adm policy add-cluster-role-to-user cluster-admin test-admin --as=system:admin
+oc adm policy add-cluster-role-to-user cluster-admin mini-admin --as=system:admin
 
-oc login -u test-admin
+oc login -u mini-admin
 oc new-project test-project
 
-docker login -u test-admin -p $(oc whoami -t) $(minishift openshift registry)
+echo $(minishift openshift registry)
+docker info 
+
+
+docker login -u $(oc whoami) -p $(oc whoami -t) $(minishift openshift registry)

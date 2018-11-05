@@ -139,4 +139,7 @@ fi
 #Start minishift 
 minishift start
 
+#--iso-url file:///iso-image/minishift-centos7.iso
+
+sleep 60
 
