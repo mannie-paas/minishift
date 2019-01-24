@@ -36,6 +36,7 @@ oc get routes
 echo "Starting IT SETUP"
 docker tag $(minishift openshift registry)/dev-spring-project/springboot:dev $(minishift openshift registry)/it-spring-project/springboot:it
 
+docker push $(minishift openshift registry)/it-spring-project/springboot:it
 oc project it-spring-project
 oc new-app --image-stream=springboot:it --name=springboot
 
